@@ -1,0 +1,23 @@
+# https://docs.portainer.io/start/install-ce/server/docker/linux -> Comunity Edition
+# https://docs.portainer.io/start/install/server/docker/linux -> Business Edition
+# Ingresar en https://ip-servidor:9443/
+
+services:
+  portainer:
+    # Confiuracion del dock
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: always
+    # Configuracion de puertos
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+      - "8000:8000"
+    # Configuracion de discos
+    volumes:
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# Declaracion del volumen, lo dejo en el directorio por defecto
+volumes:
+  portainer-data:

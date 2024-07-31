@@ -146,8 +146,7 @@ networks:
         - subnet: 192.168.200.0/24
           gateway: 192.168.200.1
 
-# Como hago uso de los volumenes aca estan las declaraciones
-# Es muy importante que los directorios existan para que el stack funcione
+# Como hago uso de los volumenes para persistencia de datos en esta seccion se declaran los directorios, es muy importante que los directorios existan para que el stack funcione
 volumes:
   # Volumen ara guardar los datos de Portainer
   portainer-data:

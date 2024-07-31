@@ -45,6 +45,6 @@ mariadb-data<br>
 npm-data<br>
 letsencrypt<br> 
 
-Si no existen en el directorio (en mi caso /mnt/docker-data) va a dar error al levantar el docker.
+Si no existen en el directorio (en mi caso /mnt/docker-data) va a dar error al levantar el stack.
 
 Para ingresar y empezar a configurar NPM ingresamos a htt://ip-servidor:81/ una vez configurado un sub-dominio para NPM se buede cerrar ese puerto y dejar solamente los puertos HTTP (80) y HTTPS (443).

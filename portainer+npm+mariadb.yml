@@ -34,6 +34,7 @@ services:
       lan_docker:
         # Si queremos darle una IP estatica cambiamos la siguiente linea
         # ipv4_address: 192.168.200.254
+# FIN portainer
 
   # Ahora creamos el servidor mariadb para que se conecten las aplicaciones, declaramos una
   # coneccion para npm que funciona en conjunto con este compose, ademas le agrego phpmyadmin
@@ -64,6 +65,7 @@ services:
       lan_docker:
         # Si queremos darle una IP estatica cambiamos la siguiente linea
         # ipv4_address: 192.168.200.253
+# FIN mariadb
 
   # phpmyadmin para manejar la DB
   # https://www.phpmyadmin.net/
@@ -88,6 +90,7 @@ services:
       lan_docker:
         # Si queremos darle una IP estatica cambiamos la siguiente linea
         # ipv4_address: 192.168.200.252
+# FIN phpmyadmin
 
   # Creamos nginx-proxy-manager para vincular la red con portainer y mariadb
   # https://nginxproxymanager.com/setup/
@@ -130,6 +133,7 @@ services:
       lan_docker:
         # Si queremos darle una IP estatica cambiamos la siguiente linea
         # ipv4_address: 192.168.200.251
+# FIN npm
 
 # Declaramos la red que vamos a utilizar
 networks:

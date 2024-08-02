@@ -40,10 +40,10 @@ Software para manjar base de datos de codigo abierto muy buena para manejar Base
 **IMPORTANTE**<br>
 Como le agregue el mapeo de volumenes a otro directorio para tener persistencia de datos, en el directorio configurado tienen que existir las liguientes carpetas antes de levantar el stack:
 
-portainer-data<br>
+letsencrypt<br> 
 mariadb-data<br>
 npm-data<br>
-letsencrypt<br> 
+portainer-data<br>
 
 Si no existen en el directorio (en mi caso /mnt/docker-data) va a dar error al levantar el docker.
 

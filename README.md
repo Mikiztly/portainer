@@ -48,3 +48,5 @@ letsencrypt<br>
 Si no existen en el directorio (en mi caso /mnt/docker-data) va a dar error al levantar el stack.
 
 Para ingresar y empezar a configurar NPM ingresamos a htt://ip-servidor:81/ una vez configurado un sub-dominio para NPM se buede cerrar ese puerto y dejar solamente los puertos HTTP (80) y HTTPS (443).
+
+Agregue un explorador de archivos llamado [File Browser](https://filebrowser.org/) ya que vamos a necesitar crear carpetas y modificar bastante los archivos de configuracion esta opcion nos da acceso a los archivos de configuracion del servidor sin utilizar ftp, ssh, etc.

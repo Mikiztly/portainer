@@ -16,6 +16,7 @@ Para ingresar al servicio se debe ingresar en el browser la direccion https://ip
 # portainer+npm+mariadb.yml
 
 Se puede utilizar en la consola:<br>
+
 ```shell
 wget -O docker-compose.yml https://github.com/Mikiztly/portainer/raw/main/portainer+npm+mariadb.yml
 ```
@@ -56,9 +57,16 @@ Agregue un explorador de archivos llamado [File Browser](https://filebrowser.org
 
 # portainer-swarm.yml
 Se puede descargar en la consola: <br>
+
 ```shell
 wget -O docker-compose.yml https://github.com/Mikiztly/portainer/raw/main/portainer-swarm.yml
 ```
 Con esta configuracion podemos manejar hasta 3 nodos, con la version [Community Edition](https://docs.portainer.io/start/install-ce/server/swarm/linux). Si te registras con [Business Edition](https://docs.portainer.io/start/install/server/swarm/linux) se activan todas las opciones, sigue la restricción de 3 nodos con la licencia gratuita pero si queremos agregar mas nodos hay que pagar.
-Es una interfaz para manejar docker desde una web muy completa y facil de utilizar, tiene una configuracion basica para ver si nos convence, si se va a utilizar para produccion se deben hacer muchos cambios.
+Es una interfaz para manejar docker desde una web muy completa y facil de utilizar, tiene una configuracion basica para ver si nos convence, si se va a utilizar para produccion se deben hacer muchos cambios.<br>
+Para desplegar el stack ejecutamos lo siguiente:
+
+```shell
+docker stack deploy --compose-file=portainer-swarm.yml portainer
+```
+
 Para ingresar al servicio se debe poner el en browser la direccion https://ip-servidor:9443/

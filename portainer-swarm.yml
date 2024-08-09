@@ -1,6 +1,6 @@
 # https://docs.portainer.io/start/install-ce/server/swarm/linux -> Comunity Edition
 # https://docs.portainer.io/start/install/server/swarm/linux -> Business Edition
-# docker stack deploy --compose-file=portainer-agent-stack.yml portainer
+# docker stack deploy --compose-file=portainer-swarm.yml portainer
 # Ingresar en https://docker-ip:9443/
 
 services:

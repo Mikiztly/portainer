@@ -59,7 +59,7 @@ Agregue un explorador de archivos llamado [File Browser](https://filebrowser.org
 Se puede descargar en la consola: <br>
 
 ```shell
-wget -O https://github.com/Mikiztly/portainer/raw/main/portainer-swarm.yml
+wget https://github.com/Mikiztly/portainer/raw/main/portainer-swarm.yml
 ```
 Con esta configuracion podemos manejar hasta 3 nodos, con la version [Community Edition](https://docs.portainer.io/start/install-ce/server/swarm/linux). Si te registras con [Business Edition](https://docs.portainer.io/start/install/server/swarm/linux) se activan todas las opciones, sigue la restricción de 3 nodos con la licencia gratuita pero si queremos agregar mas nodos hay que pagar.
 Es una interfaz para manejar docker desde una web muy completa y facil de utilizar, tiene una configuracion basica para ver si nos convence, si se va a utilizar para produccion se deben hacer muchos cambios.<br>

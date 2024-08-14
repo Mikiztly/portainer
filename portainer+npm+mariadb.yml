@@ -3,6 +3,7 @@
 # 1) la declaracion de IP es manual para poder conectarse desde otros servicios, para agregar un nuevo servicio se debe declarar la IP y configurar la lan como "external: true".
 # 2) Los puertos no se declaran ya que se manejan con NPM (Nginx-Proxy-Manager).
 # 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.
+# se puede ejecutar con docker compose --file portainer+npm+mariadb.yml up -d
 
 # Le doy un nombre descriptivo para identificar el stack
 name: administracion
@@ -169,13 +170,14 @@ networks:
           gateway: 192.168.200.1
 
 # Como hago uso de los volumenes para persistencia de datos en esta seccion se declaran los directorios, es muy importante que los directorios existan para que el stack funcione
+# Utilizo la variable $HOME para referirme al directorio home del usuario, si los datos se guardan en otro directorio se debe poner la ruta completa.
 volumes:
   # Volumen ara guardar los datos de Portainer
   portainer-data:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/portainer-data # Esta es la ruta donde van a quedar los datos persistentes
+      device: $HOME/docker-data/portainer-data # Esta es la ruta donde van a quedar los datos persistentes
       o: bind
     name: portainer-data
   # Volumen ara guardar los datos de mariadb
@@ -183,7 +185,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/mariadb-data # Esta es la ruta donde van a quedar los datos persistentes
+      device: $HOME/docker-data/mariadb-data # Esta es la ruta donde van a quedar los datos persistentes
       o: bind
     name: mariadb-data
   # Volumen ara guardar los datos de nginx-proxy-manager
@@ -191,13 +193,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/npm-data # Esta es la ruta donde van a quedar los datos persistentes
+      device: $HOME/docker-data/npm-data # Esta es la ruta donde van a quedar los datos persistentes
       o: bind
     name: npm-data
   letsencrypt:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/letsencrypt # Esta es la ruta donde van a quedar los datos persistentes
+      device: $HOME/docker-data/letsencrypt # Esta es la ruta donde van a quedar los datos persistentes
       o: bind
     name: letsencrypt

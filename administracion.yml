@@ -151,7 +151,7 @@ services:
     tty: true
     # Configuracion de discos, con esto le vamos a indicar en que directorio estan los archivos de configuracion de nuestro stack
     volumes:
-      - /mnt/docker-data:/srv
+      - $HOME/docker-data:/srv
     # Le doy un nombre al host para referirlo con NPM
     hostname: file-browser
     networks:

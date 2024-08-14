@@ -13,19 +13,21 @@ Con esta configuracion podemos manejar un servidor, podemos utilizar la version 
 Es una interfaz para manejar docker desde una web muy completa y facil de utilizar, tiene una configuracion basica para ver si nos convence, si se va a utilizar para produccion se deben hacer muchos cambios.
 Para ingresar al servicio se debe ingresar en el browser la direccion https://ip-servidor:9443/
 
-# portainer+npm+mariadb.yml
+# administracion.yml
 
 Se puede utilizar en la consola:<br>
 
 ```shell
-wget -O docker-compose.yml https://github.com/Mikiztly/portainer/raw/main/portainer+npm+mariadb.yml
+wget -O docker-compose.yml https://github.com/Mikiztly/portainer/raw/main/administracion.yml
 ```
 
 Son cuatro servicios que se deben iniciar juntos para que funcionen bien: Portainer + MariaDB + phpMyAdmin + Nginx-Proxy-Manager. Estan configurados con IP estatica para poder conectarse con otros docks y por nombre de host, hay que tener cuidado con varios aspectos muy importantes:<br>
 1) la declaracion de IP es manual para poder conectarse desde otros servicios, para agregar un nuevo servicio se debe declarar la IP y configurar la lan como "external: true".<br>
 2) Los puertos no se declaran ya que se manejan con NPM (Nginx-Proxy-Manager).<br>
 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.<br>
-4) Se declaran los volumenes para redireccionar los datos a otro directorio/disco para tener persistencia de datos.
+4) Se declaran los volumenes para redireccionar los datos a otro directorio/disco para tener persistencia de datos.<br>
+
+Al correr este stack se van a crear los siguientes contenedores:
 
 [Portainer](https://www.portainer.io/)<br>
 Con esta configuracion podemos manejar un servidor, podemos utilizar la version [Community Edition](https://docs.portainer.io/start/install-ce/server/swarm/linux) o si te registras con [Business Edition](https://docs.portainer.io/start/install/server/swarm/linux).
@@ -42,7 +44,8 @@ Para poder utilizar algun software para manejar las BD se debe declarar el puert
 Software para manjar base de datos de codigo abierto muy buena para manejar Base de Datos en el mismo servidor.
 
 **IMPORTANTE**<br>
-Como le agregue el mapeo de volumenes a otro directorio para tener persistencia de datos, en el directorio configurado tienen que existir las liguientes carpetas antes de levantar el stack:
+Como le agregue el mapeo de volumenes a otro directorio para tener persistencia de datos, utilizo la variable $HOME para referirme al directorio home del usuario. La ruta queda definida asi **$HOME/docker-data/[contenedor]**, si los datos se guardaran en otro directorio se debe poner la ruta completa.
+Ademas en el directorio configurado tienen que existir las liguientes carpetas antes de levantar el stack:
 
 letsencrypt<br> 
 mariadb-data<br>
@@ -51,7 +54,7 @@ portainer-data<br>
 
 Si no existen en el directorio (en mi caso /mnt/docker-data) va a dar error al levantar el stack.
 
-Para ingresar y empezar a configurar NPM ingresamos a htt://ip-servidor:81/ una vez configurado un sub-dominio para NPM se buede cerrar ese puerto y dejar solamente los puertos HTTP (80) y HTTPS (443).
+Para ingresar y empezar a configurar NPM ingresamos a htt://ip-servidor:81/ una vez configurado un sub-dominio para NPM se puede cerrar ese puerto y dejar solamente los puertos HTTP (80) y HTTPS (443).
 
 Agregue un explorador de archivos llamado [File Browser](https://filebrowser.org/) ya que vamos a necesitar crear carpetas y modificar bastante los archivos de configuracion esta opcion nos da acceso a los archivos de configuracion del servidor sin utilizar ftp, ssh, etc.
 

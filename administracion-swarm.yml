@@ -12,19 +12,12 @@ services:
   # https://docker-ip:9443/
   # Este es el agente que debe correr en todos los nodos
   agent:
-    # Le doy un nombre al dock
-    container_name: portainer-agent
     image: portainer/agent:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
     networks:
       - lan_docker
-    # Le doy un nombre al host para referirlo en NPM
-    # hostname: portainer
-    networks:
-      - lan_docker
-        # No le asignamos IP estatica
     # Esta es la configuracion para que corra en todos los nodos
     deploy:
       mode: global
@@ -33,26 +26,22 @@ services:
 # FIN agente portainer
 
   portainer:
-    # Le doy un nombre al dock
-    container_name: portainer
     image: portainer/portainer-ce:latest
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     # Configuracion de puertos, no se declara puertos ya que no hace falta por la configuracion de la red y NPM
-    ports:
-      - "9000:9000"
-      - "9443:9443"
-      - "8000:8000"
+    # ports:
+      # - "9000:9000"
+      # - "9443:9443"
+      # - "8000:8000"
     # Configuracion de discos
     # Es muy importante que los directorios existan para que el stack funcione
     volumes:
       - portainer-data:/data
-    # Configuramos una IP
+    # Configuramos la red
     # Le doy un nombre al host para referirlo en NPM
     hostname: portainer
     networks:
       - lan_docker
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
-        # ipv4_address: 192.168.200.254
     # Con esta configuracion solo se va a replicar 1 vez en cualquier nodo manager
     deploy:
       mode: replicated
@@ -66,10 +55,8 @@ services:
   # para poder manejar las BD de forma facil.
   # https://mariadb.com/
   mariadb:
-    # Le doy un nombre al dock
-    container_name: mariadb
     image: mariadb:latest
-    restart: always
+    # restart: always
     # Configuramos el password de root y del usuario npm para conectarse a la DB
     environment:
       MYSQL_ROOT_PASSWORD: CambiaMe
@@ -88,8 +75,6 @@ services:
     hostname: mariadb
     networks:
       - lan_docker
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
-        # ipv4_address: 192.168.200.253
     # Con esta configuracion solo se va a replicar 1 vez en cualquier nodo manager
     deploy:
       mode: replicated
@@ -102,10 +87,8 @@ services:
   # https://www.phpmyadmin.net/
     # Le doy un nombre al dock
   phpmyadmin:
-    # Le doy un nombre al dock
-    container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
-    restart: always
+    # restart: always
     # Comfiguramos el nombre del servidor de BD, no configuro usuario y password por razones de seguridad
     environment:
       PMA_HOST: mariadb
@@ -119,8 +102,6 @@ services:
     hostname: phpmyadmin
     networks:
       - lan_docker
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
-        # ipv4_address: 192.168.200.252
     # Con esta configuracion solo se va a replicar 1 vez en cualquier nodo manager
     deploy:
       mode: replicated
@@ -137,15 +118,13 @@ services:
   # Email: admin@example.com
   # Password: changeme
   npm:
-    # Le doy un nombre al dock
-    container_name: npm
     image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
+    # restart: unless-stopped
     # Estos son los unicos puertos a declara para que funcione todo con el proxy NPM
     ports:
       - '80:80'
       - '443:443'
-      - '81:81' # Para administrar NPM
+      # - '81:81' # Se lo habilita la primera vez para administrar NPM
     environment:
       # Coneccion a la base de datos
       # Esta configuracion es para conectarse a la DB creada anteriormente
@@ -168,8 +147,6 @@ services:
     hostname: npm
     networks:
       - lan_docker
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
-        # ipv4_address: 192.168.200.251
     # Con esta configuracion solo se va a replicar 1 vez en cualquier nodo manager
     deploy:
       mode: replicated
@@ -182,13 +159,11 @@ services:
   # https://filebrowser.org/installation
   # Usuario y Password: admin
   file-browser:
-    # Le doy un nombre al dock
-    container_name: file-browser
     image: filebrowser/filebrowser
     # Configuracion de puertos, no lo declara puertos ya que uso la configuracion de la red y NPM
     # ports:
       # - "8080:80"
-    restart: always
+    # restart: always
     # Le activo la terminal
     tty: true
     # Configuracion de discos, con esto le vamos a indicar en que directorio estan los archivos de configuracion de nuestro stack
@@ -221,7 +196,8 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/portainer-data # Esta es la ruta donde van a quedar los datos persistentes
+      # Esta es la ruta donde van a quedar los datos persistentes
+      device: /mnt/docker-data/portainer-data
       o: bind
     name: portainer-data
   # Volumen ara guardar los datos de mariadb
@@ -229,7 +205,8 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/mariadb-data # Esta es la ruta donde van a quedar los datos persistentes
+      # Esta es la ruta donde van a quedar los datos persistentes
+      device: /mnt/docker-data/mariadb-data
       o: bind
     name: mariadb-data
   # Volumen ara guardar los datos de nginx-proxy-manager
@@ -237,13 +214,15 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/npm-data # Esta es la ruta donde van a quedar los datos persistentes
+      # Esta es la ruta donde van a quedar los datos persistentes
+      device: /mnt/docker-data/npm-data
       o: bind
     name: npm-data
   letsencrypt:
     driver: local
     driver_opts:
       type: none
-      device: /mnt/docker-data/letsencrypt # Esta es la ruta donde van a quedar los datos persistentes
+      # Esta es la ruta donde van a quedar los datos persistentes
+      device: /mnt/docker-data/letsencrypt
       o: bind
     name: letsencrypt

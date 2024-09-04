@@ -57,12 +57,15 @@ services:
   mariadb:
     image: mariadb:latest
     # restart: always
+    # Utilizo un archivo externo para confiurar usuario root y una base para npm con su usuario
+    env_file:
+      - mariadb.env
     # Configuramos el password de root y del usuario npm para conectarse a la DB
-    environment:
-      MYSQL_ROOT_PASSWORD: CambiaMe
-      MYSQL_DATABASE: npm
-      MYSQL_USER: npm
-      MYSQL_PASSWORD: npm
+    # environment:
+      # MYSQL_ROOT_PASSWORD: CambiaMe
+      # MYSQL_DATABASE: npm
+      # MYSQL_USER: npm
+      # MYSQL_PASSWORD: npm
     # Configuracion de puertos, no se declara puertos ya que no hace falta por la configuracion de la red y NPM
     # ports:
       # - '3306:3306'
@@ -125,16 +128,19 @@ services:
       - '80:80'
       - '443:443'
       # - '81:81' # Se lo habilita la primera vez para administrar NPM
-    environment:
+    # Utilizo un archivo externo para confiurar usuario root y una base para npm con su usuario
+    env_file:
+      - npm.env
+    # environment:
       # Coneccion a la base de datos
       # Esta configuracion es para conectarse a la DB creada anteriormente
-      DB_MYSQL_HOST: "mariadb"
-      DB_MYSQL_PORT: 3306
-      DB_MYSQL_USER: "npm"
-      DB_MYSQL_PASSWORD: "npm"
-      DB_MYSQL_NAME: "npm"
+      # DB_MYSQL_HOST: "mariadb"
+      # DB_MYSQL_PORT: 3306
+      # DB_MYSQL_USER: "npm"
+      # DB_MYSQL_PASSWORD: "npm"
+      # DB_MYSQL_NAME: "npm"
       # Uncomment this if IPv6 is not enabled on your host
-      DISABLE_IPV6: 'true'
+      # DISABLE_IPV6: 'true'
     # Configuracion de discos
     # Es muy importante que los directorios existan para que el stack funcione
     volumes:

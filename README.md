@@ -111,7 +111,7 @@ Para poder utilizar algun software para manejar las BD se debe declarar el puert
 Software para manjar base de datos de codigo abierto muy buena para manejar Base de Datos en el mismo servidor.
 
 **IMPORTANTE**<br>
-Como le agregue el mapeo de volumenes a otro directorio para tener persistencia de datos, utilizo la variable $HOME para referirme al directorio home del usuario. La ruta queda definida asi **/mnt/docker-data/[contenedor]**, si los datos se guardaran en otro directorio se debe poner la ruta completa.
+Al ser un cluster de servidores se tiene un almacenamiento compartido, se debe poner la ruta de ese almacenamiento. La ruta queda definida asi **/mnt/docker-data/[contenedor]**, si los datos se guardaran en otro directorio se debe poner la ruta completa.
 Ademas en el directorio configurado tienen que existir las liguientes carpetas antes de levantar el stack:
 
 letsencrypt<br> 

@@ -3,6 +3,7 @@
 # 1) Se declara un red para poder redireccionar por nombre de contenedor con nginx-proxy-manager, para agregar un nuevo servicio se debe declarar la red y configurarla como "external: true".
 # 2) Los puertos no se declaran ya que se manejan con NPM (Nginx-Proxy-Manager).
 # 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.
+# 4) Se declaran los volumenes para redireccionar los datos a otro directorio/disco para tener persistencia de datos.
 # se puede ejecutar con docker compose --file administracion.yml up -d
 
 # Le doy un nombre descriptivo para identificar el stack

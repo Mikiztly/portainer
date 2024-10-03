@@ -1,6 +1,6 @@
-# Son cuatro servicios para manejar docker: portainer + mariadb + phpmyadmin + nginx-proxy-manager
+# Son cinco servicios para manejar docker: portainer + mariadb + phpmyadmin + nginx-proxy-manager + file-browser
 # Hay que tener cuidado con varios aspectos muy importantes:
-# 1) la declaracion de IP es manual para poder conectarse desde otros servicios, para agregar un nuevo servicio se debe declarar la IP y configurar la lan como "external: true".
+# 1) Se declara un red para poder redireccionar por nombre de contenedor con nginx-proxy-manager, para agregar un nuevo servicio se debe declarar la red y configurarla como "external: true".
 # 2) Los puertos no se declaran ya que se manejan con NPM (Nginx-Proxy-Manager).
 # 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.
 # se puede ejecutar con docker compose --file administracion.yml up -d
@@ -18,55 +18,57 @@ services:
     container_name: portainer
     image: portainer/portainer-ce:latest
     restart: always
-    # Configuracion de puertos, no se declara puertos ya que no hace falta por la configuracion de la red y NPM
+    # Configuracion de puertos, no se declara puertos ya que no hace falta por la configuracion de la red y NPM. Los dejo para referencia
     # ports:
       # - "9000:9000"
       # - "9443:9443"
       # - "8000:8000"
-    # Configuracion de discos
+    # Como hago uso de los volumenes para persistencia de datos aca se declaran los directorios, es muy importante que los directorios existan para que el stack funcione. Utilizo la variable ${PATH_DATA} definida en el archivo .env para referirme al directorio.
     # Es muy importante que los directorios existan para que el stack funcione
     volumes:
-      - portainer-data:/data
+      - ${PATH_DATA}/portainer-data:/data
       - /var/run/docker.sock:/var/run/docker.sock
-    # Configuramos una IP
+    # Configuramos una red
     # Le doy un nombre al host para referirlo en NPM
     hostname: portainer
     networks:
       lan_docker:
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
+        # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.254
-# FIN portainer
+  # FIN portainer
 
-  # Ahora creamos el servidor mariadb para que se conecten las aplicaciones, declaramos una
-  # coneccion para npm que funciona en conjunto con este compose, ademas le agrego phpmyadmin
-  # para poder manejar las BD de forma facil.
+  # Ahora creamos el servidor mariadb para que se conecten las aplicaciones, declaramos una coneccion para npm que funciona en conjunto con este compose, ademas le agrego phpmyadmin para poder manejar las BD de forma facil.
   # https://mariadb.com/
   mariadb:
     # Le doy un nombre al dock
     container_name: mariadb
     image: mariadb:latest
     restart: always
-    # Configuramos el password de root y del usuario npm para conectarse a la DB
+    # Configuramos el password de root y del usuario npm para conectarse a la DB, aca utilizo los secretos para pasar la contraseña
     environment:
-      MYSQL_ROOT_PASSWORD: CambiaMe
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: npm
       MYSQL_USER: npm
-      MYSQL_PASSWORD: npm
+      MYSQL_PASSWORD_FILE: /run/secrets/db_npm_password
     # Configuracion de puertos, no se declara puertos ya que no hace falta por la configuracion de la red y NPM
     # ports:
       # - '3306:3306'
-    # Configuracion de discos
+    # Declaramos los archivos que usamos para las contraseñas
+    secrets:
+      - db_root_password
+      - db_npm_password
+    # Como hago uso de los volumenes para persistencia de datos aca se declaran los directorios, es muy importante que los directorios existan para que el stack funcione. Utilizo la variable ${PATH_DATA} definida en el archivo.env para referirme al directorio.
     # Es muy importante que los directorios existan para que el stack funcione
     volumes:
-      - mariadb-data:/var/lib/mysql
-    # Configuramos una IP estatica para el dock en la red portainer
+      - ${PATH_DATA}/mariadb-data:/var/lib/mysql
+    # Configuramos una red para el dock en la red portainer
     # Le doy un nombre al host para referirlo en NPM
     hostname: mariadb
     networks:
       lan_docker:
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
+        # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.253
-# FIN mariadb
+  # FIN mariadb
 
   # phpmyadmin para manejar la DB
   # https://www.phpmyadmin.net/
@@ -84,14 +86,14 @@ services:
       # - '8100:80'
     depends_on:
       - mariadb
-    # Configuramos una IP estatica para el dock
+    # Configuramos una red para el dock
     # Le doy un nombre al host para referirlo en NPM
     hostname: phpmyadmin
     networks:
       lan_docker:
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
+        # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.252
-# FIN phpmyadmin
+  # FIN phpmyadmin
 
   # Creamos nginx-proxy-manager para vincular la red con portainer y mariadb
   # https://nginxproxymanager.com/setup/
@@ -109,34 +111,37 @@ services:
     ports:
       - '80:80'
       - '443:443'
-      - '81:81' # Para administrar NPM
+      - '81:81' # Para administrar NPM por primera vez, despues se puede cerrar el puerto
     environment:
       # Coneccion a la base de datos
-      # Esta configuracion es para conectarse a la DB creada anteriormente
+      # Esta configuracion es para conectarse a la DB creada anteriormente, tambien hago uso de los secretos para las contraseñas
       DB_MYSQL_HOST: "mariadb"
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: "npm"
-      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_PASSWORD__FILE: /run/secrets/db_npm_password
       DB_MYSQL_NAME: "npm"
       # Uncomment this if IPv6 is not enabled on your host
       DISABLE_IPV6: 'true'
-    # Configuracion de discos
+    # Declaramos los archivos que usamos para las contraseñas
+    secrets:
+      - db_npm_password
+    # Como hago uso de los volumenes para persistencia de datos aca se declaran los directorios, es muy importante que los directorios existan para que el stack funcione. Utilizo la variable ${PATH_DATA} definida en el archivo.env para referirme al directorio.
     # Es muy importante que los directorios existan para que el stack funcione
     volumes:
-      - npm-data:/data
-      - letsencrypt:/etc/letsencrypt
+      - ${PATH_DATA}/npm-data:/data
+      - ${PATH_DATA}/letsencrypt:/etc/letsencrypt
     depends_on:
       - mariadb
-    # Configuramos una IP estatica para el dock
+    # Configuramos una red para el dock
     # Le doy un nombre al host para referirlo en NPM
     hostname: npm
     networks:
       lan_docker:
-        # Si queremos darle una IP estatica cambiamos la siguiente linea
+        # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.251
-# FIN npm
+  # FIN npm
 
-  # Este es un explorador de archivos donde podemos ver editar , subir, etc archivos desde el servidor. Muy util para evitar utilizar ssh o ftp
+  # Este es un explorador de archivos donde podemos ver, subir, etc archivos desde el servidor. Muy util para evitar utilizar ssh o ftp
   # https://filebrowser.org/installation
   # Usuario y Password: admin
   file-browser:
@@ -149,14 +154,21 @@ services:
     restart: always
     # Le activo la terminal
     tty: true
-    # Configuracion de discos, con esto le vamos a indicar en que directorio estan los archivos de configuracion de nuestro stack
+    # Como hago uso de los volumenes para persistencia de datos aca se declaran los directorios, es muy importante que los directorios existan para que el stack funcione. Utilizo la variable ${PATH_DATA} definida en el archivo.env para referirme al directorio.
     volumes:
-      - $HOME/docker-data:/srv
+      - ${PATH_DATA}:/srv
     # Le doy un nombre al host para referirlo con NPM
     hostname: file-browser
     networks:
       lan_docker:
-# FIN file-browser
+  # FIN file-browser
+
+# Al utilizar los secretos para pasar las contraseñas indicamos el path al archivo
+secrets:
+  db_npm_password:
+    file: db_npm_password.txt
+  db_root_password:
+    file: db_root_password.txt
 
 # Declaramos la red que vamos a utilizar
 networks:
@@ -169,37 +181,3 @@ networks:
         - subnet: 192.168.200.0/24
           gateway: 192.168.200.1
 
-# Como hago uso de los volumenes para persistencia de datos en esta seccion se declaran los directorios, es muy importante que los directorios existan para que el stack funcione
-# Utilizo la variable $HOME para referirme al directorio home del usuario, si los datos se guardan en otro directorio se debe poner la ruta completa.
-volumes:
-  # Volumen ara guardar los datos de Portainer
-  portainer-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/docker-data/portainer-data # Esta es la ruta donde van a quedar los datos persistentes
-      o: bind
-    name: portainer-data
-  # Volumen ara guardar los datos de mariadb
-  mariadb-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/docker-data/mariadb-data # Esta es la ruta donde van a quedar los datos persistentes
-      o: bind
-    name: mariadb-data
-  # Volumen ara guardar los datos de nginx-proxy-manager
-  npm-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/docker-data/npm-data # Esta es la ruta donde van a quedar los datos persistentes
-      o: bind
-    name: npm-data
-  letsencrypt:
-    driver: local
-    driver_opts:
-      type: none
-      device: $HOME/docker-data/letsencrypt # Esta es la ruta donde van a quedar los datos persistentes
-      o: bind
-    name: letsencrypt

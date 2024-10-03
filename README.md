@@ -32,13 +32,13 @@ Son cinco servicios que se deben iniciar juntos para que funcionen bien: Portain
     * db_root_passord.txt -> es donde se guarda la contraseña de root para manejar mariadb, **MUY IMPORTANTE: cambiar esa contraseña**
 Estos archivos de configuracion se pueden crear o descargar con:
 ```shell
-wget https://github.com/Mikiztly/portainer/raw/main/.env
+wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/.env
 ```
 ```shell
-wget https://github.com/Mikiztly/portainer/raw/main/db_npm_passord.txt
+wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/db_root_password.txt
 ```
 ```shell
-wget https://github.com/Mikiztly/portainer/raw/main/db_root_passord.txt
+wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/db_root_password.txt
 ```
 
 Al correr este stack se van a crear los siguientes contenedores:

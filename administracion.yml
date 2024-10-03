@@ -3,7 +3,7 @@
 # 1) la declaracion de IP es manual para poder conectarse desde otros servicios, para agregar un nuevo servicio se debe declarar la IP y configurar la lan como "external: true".
 # 2) Los puertos no se declaran ya que se manejan con NPM (Nginx-Proxy-Manager).
 # 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.
-# se puede ejecutar con docker compose --file portainer+npm+mariadb.yml up -d
+# se puede ejecutar con docker compose --file administracion.yml up -d
 
 # Le doy un nombre descriptivo para identificar el stack
 name: administracion

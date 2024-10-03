@@ -27,7 +27,7 @@ Son cinco servicios que se deben iniciar juntos para que funcionen bien: Portain
 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.<br>
 4) Se declaran los volumenes para redireccionar los datos a otro directorio/disco para tener persistencia de datos.<br>
 5) Hago uso de secretos y variables guardadas en los archivos:<br>
-    * .env -> actualmente solo tengo el path para los datos persistentes, estoy utilizando otra particion del disco montada en /mnt/docker-data
+    * .env -> actualmente solo tengo el path para los datos persistentes, estoy utilizando otra particion del disco montada en /mnt/docker-data<br>
       Para utilizar otra ruta o la variable $HOME se debe editar el archivo
     * db_npm_passord.txt -> es donde se guarda la contraseña del usuario para conectar Nginx-Proxy-Manager a mariadb, **MUY IMPORTANTE: cambiar esa contraseña**
     * db_root_passord.txt -> es donde se guarda la contraseña de root para manejar mariadb, **MUY IMPORTANTE: cambiar esa contraseña**

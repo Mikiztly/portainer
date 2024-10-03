@@ -22,12 +22,13 @@ wget -O docker-compose.yml https://github.com/Mikiztly/portainer/raw/main/admini
 ```
 
 Son cinco servicios que se deben iniciar juntos para que funcionen bien: Portainer + MariaDB + phpMyAdmin + Nginx-Proxy-Manager + File Browser. Estan configurados con red especifica para poder conectarse con otros docks por nombre de host, hay que tener cuidado con varios aspectos muy importantes:<br>
-1) lSe declara un red para poder redireccionar por nombre de contenedor con nginx-proxy-manager, para agregar un nuevo servicio se debe declarar la red y configurarla como "external: true".<br>
+1) Se declara un red para poder redireccionar por nombre de contenedor con nginx-proxy-manager, para agregar un nuevo servicio se debe declarar la red y configurarla como "external: true".<br>
 2) Los puertos no se declaran ya que se manejan con NPM (Nginx-Proxy-Manager).<br>
 3) A todos los dock se les tiene que poner un nombre para poder referirlos en NPM.<br>
 4) Se declaran los volumenes para redireccionar los datos a otro directorio/disco para tener persistencia de datos.<br>
 5) Hago uso de secretos y variables guardadas en los archivos:<br>
-    * .env -> actualmente solo tengo el path para los datos persistentes, estoy utilizando otra particion del disco montada en /mnt/docker-data para utilizar otra ruta o la variable $HOME se debe editar el archivo
+    * .env -> actualmente solo tengo el path para los datos persistentes, estoy utilizando otra particion del disco montada en /mnt/docker-data
+      Para utilizar otra ruta o la variable $HOME se debe editar el archivo
     * db_npm_passord.txt -> es donde se guarda la contraseña del usuario para conectar Nginx-Proxy-Manager a mariadb, **MUY IMPORTANTE: cambiar esa contraseña**
     * db_root_passord.txt -> es donde se guarda la contraseña de root para manejar mariadb, **MUY IMPORTANTE: cambiar esa contraseña**
 Estos archivos de configuracion se pueden crear o descargar con:

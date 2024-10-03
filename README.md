@@ -38,7 +38,7 @@ wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/.env
 wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/db_root_password.txt
 ```
 ```shell
-wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/db_root_password.txt
+wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/db_npm_password.txt
 ```
 
 Al correr este stack se van a crear los siguientes contenedores:

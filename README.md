@@ -30,8 +30,9 @@ Son cinco servicios que se deben iniciar juntos para que funcionen bien: Portain
     * .env -> actualmente solo tengo el path para los datos persistentes, estoy utilizando otra particion del disco montada en /mnt/docker-data<br>
       Para utilizar otra ruta o la variable $HOME se debe editar el archivo
     * db_npm_passord.txt -> es donde se guarda la contraseña del usuario para conectar Nginx-Proxy-Manager a mariadb, **MUY IMPORTANTE: cambiar esa contraseña**
-    * db_root_passord.txt -> es donde se guarda la contraseña de root para manejar mariadb, **MUY IMPORTANTE: cambiar esa contraseña**
-Estos archivos de configuracion se pueden crear o descargar con:
+    * db_root_passord.txt -> es donde se guarda la contraseña de root para manejar mariadb, **MUY IMPORTANTE: cambiar esa contraseña**<br>
+
+Estos archivos de configuracion se deben crear o descargar con:
 ```shell
 wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/.env
 ```
@@ -44,9 +45,8 @@ wget https://raw.githubusercontent.com/Mikiztly/portainer/refs/heads/main/db_npm
 
 Al correr este stack se van a crear los siguientes contenedores:
 
-[Portainer](https://www.portainer.io/)<br>
-Con esta configuracion podemos manejar un servidor, podemos utilizar la version [Community Edition](https://docs.portainer.io/start/install-ce/server/swarm/linux) o si te registras con [Business Edition](https://docs.portainer.io/start/install/server/swarm/linux).
-Es una interfaz para manejar docker desde una web muy completa y facil de utilizar, tiene una configuracion basica para ver si nos convence, si se va a utilizar para produccion se deben hacer muchos cambios.
+[Portainer](https://www.portainer.io/): Es una interfaz para manejar docker desde una web muy completa y facil de utilizar<br>
+Con esta configuracion podemos manejar un servidor, podemos utilizar la version [Community Edition](https://docs.portainer.io/start/install-ce/server/swarm/linux) que tiene algunas funciones desactivadas o si te registras en [Business Edition](https://docs.portainer.io/start/install/server/swarm/linux) se activan todas las funciones.
 
 [Nginx-Proxy-Manager](https://nginxproxymanager.com/)<br>
 Segun la documentacion oficial sirve para proporcionar a los usuarios una manera fácil de configurar hosts con un proxy inverso y certificados SSL, tiene que ser tan fácil que un mono pueda hacerlo. En resumen sirve para manejar dominios, sub-dominios, certificados ssl, etc.
@@ -59,8 +59,7 @@ Para poder utilizar algun software para manejar las BD se debe declarar el puert
 Software para manjar base de datos de codigo abierto muy buena para manejar Base de Datos en el mismo servidor.
 
 **IMPORTANTE**<br>
-Como le agregue el mapeo de volumenes a otro directorio para tener persistencia de datos, utilizo la variable $HOME para referirme al directorio home del usuario. La ruta queda definida asi **$HOME/docker-data/[contenedor]**, si los datos se guardaran en otro directorio se debe poner la ruta completa.
-Ademas en el directorio configurado tienen que existir las liguientes carpetas antes de levantar el stack:
+Como le agregue el mapeo de volumenes a otro directorio para tener persistencia de datos, utilizo la variable PATH_DATA (definida en el archivo .env) para configurar el directorio donde se guardarán los datos. Antes de levantar este stack debemos asegurarnos que las siguientes carpetas existen:
 
 letsencrypt<br> 
 mariadb-data<br>

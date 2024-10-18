@@ -33,12 +33,12 @@ services:
     # Le doy un nombre al host para referirlo en NPM
     hostname: portainer
     networks:
-      lan_docker:
+      lan-docker:
         # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.254
   # FIN portainer
 
-  # Ahora creamos el servidor mariadb para que se conecten las aplicaciones, declaramos una coneccion para npm que funciona en conjunto con este compose, ademas le agrego phpmyadmin para poder manejar las BD de forma facil.
+  # Ahora creamos el servidor mariadb para que se conecten las aplicaciones, declaramos una coneccion para npm que funciona en conjunto con este compose, ademas le agrego phpmyadmin para poder manejar las BD de forma facil. Tambien la cargo la Base para NPM
   # https://mariadb.com/
   mariadb:
     # Le doy un nombre al dock
@@ -66,7 +66,7 @@ services:
     # Le doy un nombre al host para referirlo en NPM
     hostname: mariadb
     networks:
-      lan_docker:
+      lan-docker:
         # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.253
   # FIN mariadb
@@ -91,7 +91,7 @@ services:
     # Le doy un nombre al host para referirlo en NPM
     hostname: phpmyadmin
     networks:
-      lan_docker:
+      lan-docker:
         # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.252
   # FIN phpmyadmin
@@ -137,7 +137,7 @@ services:
     # Le doy un nombre al host para referirlo en NPM
     hostname: npm
     networks:
-      lan_docker:
+      lan-docker:
         # Si queremos darle una IP cambiamos la siguiente linea
         # ipv4_address: 192.168.200.251
   # FIN npm
@@ -161,7 +161,7 @@ services:
     # Le doy un nombre al host para referirlo con NPM
     hostname: file-browser
     networks:
-      lan_docker:
+      lan-docker:
   # FIN file-browser
 
 # Al utilizar los secretos para pasar las contraseñas indicamos el path al archivo
@@ -174,11 +174,10 @@ secrets:
 # Declaramos la red que vamos a utilizar
 networks:
   # Configuracion de la red lan_docker
-  lan_docker:
-    name: lan_docker
+  lan-docker:
+    name: lan-docker
     driver: bridge
     ipam:
       config:
         - subnet: 192.168.200.0/24
           gateway: 192.168.200.1
-
